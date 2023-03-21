@@ -33,7 +33,9 @@
 
 		<ion-list>
             <div collection-repeat="entry in data.displayTimelineEntries" item-height="getCardHeight(entry)">
-                <infinite-scroll-trip-item ng-if="entry.start_ts" trip="entry" config="ui_config"></infinite-scroll-trip-item>
+                <trip-list-item ng-if="entry.start_ts" ng-custom-element ngce-prop-trip="entry"></trip-list-item>
+                <!-- <trip-list-item ng-prop-trip="entry"></trip-list-item> -->
+                <!-- <infinite-scroll-trip-item ng-if="entry.start_ts" trip="entry" config="ui_config"></infinite-scroll-trip-item> -->
                 <infinite-scroll-place-item ng-if="showPlaces && entry.enter_ts" place="entry" config="ui_config"></infinite-scroll-place-item>
             </div>
         </ion-list>

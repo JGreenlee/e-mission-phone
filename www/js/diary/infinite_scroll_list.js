@@ -10,6 +10,7 @@
 
 angular.module('emission.main.diary.infscrolllist',['ui-leaflet',
                                       'ionic-datepicker',
+                                      'ngCustomElement',
                                       'emission.main.common.services',
                                       'emission.services',
                                       'emission.config.imperial',
