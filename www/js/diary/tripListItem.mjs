@@ -8,11 +8,14 @@ class TripListItem extends LitElement {
     };
   };
 
+  createRenderRoot() {
+    return this;
+  }
+
   render() {
     const trip = this.trip;
     return html`
-    <link rel="stylesheet" src="css/main.diary.css">
-    <div ng-class="{'enhanced-trip-item': configTripNotes}">
+    <div>
     <!-- New Trip Template format  -->
 
         <ion-item class="unified-diary-item" style="background-color: transparent;" class="list-item">
@@ -118,14 +121,6 @@ class TripListItem extends LitElement {
     </div>
   `;
   }
-
-
-
-  static styles = css`
-    @import url('lib/ionic/css/ionic.css');
-    @import url('css/main.diary.css');
-    @import url('css/style.css');
-  `;
 }
 
 customElements.define('trip-list-item', TripListItem);

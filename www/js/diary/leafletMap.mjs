@@ -1,52 +1,48 @@
 import { LitElement, html, css } from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
 import '../../manual_lib/leaflet/leaflet-src.js';
 
-const sheet = css`
-  @import url('manual_lib/leaflet/leaflet.css');
-  .leaflet-map {
-    height: 100%;
-    z-index: -1;
-  }
-`;
-
-const template = () => html`
-    <div class="leaflet-map"></div>
-`
-
 class LeafletMap extends LitElement {
 
   static get properties() {
     return {
-      geojson: { type: Object },
+      gj: { type: Object },
+      opts: { type: Object}
     };
   };
 
-  constructor() {
-    super();
-  }
-
-  firstUpdated() {
+  _updateMap() {
     const mapEl = this.shadowRoot.querySelector('.leaflet-map');
-    if (this.geojson) {
-      const map = L.map(mapEl, {
-        scrollWheelZoom: false,
-        doubleClickZoom: false,
-        dragging: false, 
-        touchZoom: false,
-      });
-      const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
+    if (this.gj) {
+      const map = L.map(mapEl, this.opts || {});
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
-      const gj = L.geoJSON(this.geojson).addTo(map);
-      const gjBounds = gj.getBounds().pad(.05);
+      const gj = L.geoJSON(this.gj).addTo(map);
+      const gjBounds = gj.getBounds().pad(0.2);
       map.fitBounds(gjBounds);
     }
   }
 
-  render() {
-    return template()
+  firstUpdated() {
+    setTimeout(() => this._updateMap(), 500);
   }
-  static styles = sheet;
+
+  render() {
+    return html`
+      <div class="leaflet-map"></div>
+    `;
+  }
+
+  static styles = css`
+    @import url('css/main.diary.css');
+    @import url('manual_lib/leaflet/leaflet.css');
+
+    .leaflet-map {
+      border-radius: var(--map-border-radius, 0px);
+      height: 100%;
+      overflow: hidden;
+      isolation: isolate;
+    }
+  `;
 }
 customElements.define('leaflet-map', LeafletMap);

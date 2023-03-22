@@ -942,6 +942,7 @@ button.button.back-button.buttons.button-clear.header-item {
         display: flex;
         justify-content: center;
         align-items: center;
+        z-index: 999;
         font-style: normal;
         font-weight: bold;
         font-size: 13px;
@@ -978,6 +979,7 @@ button.button.back-button.buttons.button-clear.header-item {
         display: flex;
         justify-content: center;
         align-items: center;  
+        z-index: 999;
         font-style: normal;
         font-weight: bold;
         font-size: 13px;

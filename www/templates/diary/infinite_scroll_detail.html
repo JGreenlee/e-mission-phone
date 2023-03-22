@@ -27,9 +27,13 @@
             </div>
         </div>
         <div style="height: 10px;"></div>
-        <leaflet geojson="tripgj" id="infscroll-detail" defaults="mapCtrl.defaults" 
+        <div style="height: 50%">
+            <leaflet-map ng-custom-element ngce-prop-gj="tripgj.data" data-tap-disabled="true">
+            </leaflet-map>
+        </div>
+        <!-- <leaflet geojson="tripgj" id="infscroll-detail" defaults="mapCtrl.defaults" 
             height="50%" width="100%" data-tap-disabled="true">
-        </leaflet>
+        </leaflet> -->
         <div style="height: 15px;"></div>
         <div class="row" style="padding-top: 10px !important; padding-bottom: 10px !important; padding-left: 20px !important; padding-right: 20px !important;">
           <div class="col" style="width: 30%; margin-top: 0; font-size: 1.1em; font-weight: thin;">
