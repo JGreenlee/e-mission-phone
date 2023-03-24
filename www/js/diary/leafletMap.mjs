@@ -5,19 +5,34 @@ class LeafletMap extends LitElement {
 
   static get properties() {
     return {
-      gj: { type: Object },
+      trip: { type: Object },
       opts: { type: Object}
     };
   };
 
+  static pointIcon = L.divIcon({className: 'leaflet-div-icon', iconSize: [0, 0]});
+  static startIcon = L.divIcon({className: 'leaflet-div-icon-start', iconSize: [18, 18], html: '<div class="leaflet-div-ionicon leaflet-div-ionicon-start">★</div>'});
+  static stopIcon = L.divIcon({className: 'leaflet-div-icon-stop', iconSize: [18, 18], html: '<div class="leaflet-div-ionicon leaflet-div-ionicon-stop">⚑</div>'});
+
+  pointToLayer(feature, latlng) {
+    switch(feature.properties.feature_type) {
+      case "start_place": return L.marker(latlng, {icon: LeafletMap.startIcon});
+      case "end_place": return L.marker(latlng, {icon: LeafletMap.stopIcon});
+      case "stop": return L.circleMarker(latlng);
+      case "incident": return PostTripManualMarker.incidentMarker(feature, latlng);
+      case "location": return L.marker(latlng, {icon: LeafletMap.pointIcon});
+      default: alert("Found unknown type in feature"  + feature); return L.marker(latlng)
+    }
+  };
+
   _updateMap() {
     const mapEl = this.shadowRoot.querySelector('.leaflet-map');
-    if (this.gj) {
+    if (this.trip) {
       const map = L.map(mapEl, this.opts || {});
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
       }).addTo(map);
-      const gj = L.geoJSON(this.gj).addTo(map);
+      const gj = L.geoJSON(this.trip.data, {pointToLayer: this.pointToLayer}).addTo(map);
       const gjBounds = gj.getBounds().pad(0.2);
       map.fitBounds(gjBounds);
     }

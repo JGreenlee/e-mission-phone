@@ -11,7 +11,7 @@
             <div id="left-diary-card" class="diary-map-shell" ng-click="showDetail($event, trip)">
                 <div class="diary-map" ng-class="{short: configTripNotes}">
                     <leaflet-map ng-custom-element
-                        ngce-prop-gj="trip.data" ngce-prop-opts="{zoomControl: false, dragging: false}"
+                        ngce-prop-trip="trip" ngce-prop-opts="{zoomControl: false, dragging: false}"
                         ng-class="{short: configTripNotes}">
                     </leaflet-map>
                 </div>
