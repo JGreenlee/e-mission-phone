@@ -2,6 +2,7 @@
 
 import angular from 'angular';
 import 'nvd3';
+import BarChart from './components/BarChart';
 
 angular.module('emission.main.metrics',['emission.services',
                                         'ionic-datepicker',
@@ -10,7 +11,8 @@ angular.module('emission.main.metrics',['emission.services',
                                         'emission.main.metrics.mappings',
                                         'emission.stats.clientstats',
                                         'emission.plugin.kvstore',
-                                        'emission.plugin.logger'])
+                                        'emission.plugin.logger',
+                                        BarChart.module])
 
 .controller('MetricsCtrl', function($scope, $ionicActionSheet, $ionicLoading,
                                     ClientStats, CommHelper, $window, $ionicPopup,
