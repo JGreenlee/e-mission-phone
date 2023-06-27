@@ -7,14 +7,6 @@ angular.module('emission.survey.enketo.demographics',
         'emission.survey.enketo.answer',
         // 'emission.survey.enketo.preview',
         'emission.survey.inputmatcher'])
-.directive('enketoDemographicsButton', function() {
-  return {
-    scope: {
-    },
-    controller: "EnketoDemographicsButtonCtrl",
-    templateUrl: 'templates/survey/enketo/demographics-button.html'
-  };
-})
 .directive('enketoDemographicsInline', function() {
   return {
     scope: {
@@ -23,28 +15,6 @@ angular.module('emission.survey.enketo.demographics',
     controller: "EnketoDemographicsInlineCtrl",
     templateUrl: 'templates/survey/enketo/inline.html'
   };
-})
-.controller("EnketoDemographicsButtonCtrl", function($scope, $element, $attrs,
-    EnketoSurveyLaunch, $ionicPopover, ClientStats,
-    EnketoDemographicsService) {
-  console.log("Invoked enketo directive controller for demographics ");
-
-  $scope.openPopover = function ($event) {
-    return EnketoDemographicsService.loadPriorDemographicSurvey().then((lastSurvey) => {
-        return EnketoSurveyLaunch
-          .launch($scope, 'UserProfileSurvey', { prefilledSurveyResponse: lastSurvey?.data?.xmlResponse,
-                showBackButton: true, showFormFooterJumpNav: true  })
-          .then(result => {
-            console.log("demographic survey result ", result);
-          });
-    });
-  };
-
-  $scope.init = function() {
-      console.log("During initialization of the button control", $scope.trip);
-  }
-
-  $scope.init();
 })
 .controller("EnketoDemographicsInlineCtrl", function($scope, $window, $element, $attrs,
     $http, EnketoSurveyLaunch, EnketoSurvey, $ionicPopover, ClientStats,
