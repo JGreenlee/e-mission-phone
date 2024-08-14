@@ -27,7 +27,7 @@ let push;
  * assigns on 'notification' functionality
  */
 function startupInit() {
-  push = window['PushNotification'].init({
+  push = window['PushNotification']?.init({
     ios: {
       badge: true,
       sound: true,
@@ -40,7 +40,7 @@ function startupInit() {
       clearNotifications: true,
     },
   });
-  push.on('notification', (data) => {
+  push?.on('notification', (data) => {
     if (window['cordova'].platformId == 'ios') {
       // Parse the iOS values that are returned as strings
       if (data && data.additionalData) {
@@ -69,14 +69,14 @@ function startupInit() {
 function registerPromise() {
   return new Promise<{ token: string; type: string }>((resolve, reject) => {
     startupInit();
-    push.on('registration', (data) => {
+    push?.on('registration', (data) => {
       logDebug('Got registration ' + data);
       resolve({
         token: data.registrationId,
         type: data.registrationType,
       });
     });
-    push.on('error', (error) => {
+    push?.on('error', (error) => {
       logWarn('Got push error ' + error);
       reject(error);
     });
