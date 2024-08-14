@@ -9,7 +9,7 @@ export type InputDetails<T extends string> = {
 export type LabelOption = {
   value: string;
   baseMode: string;
-  met?: { range: any[]; mets: number };
+  met?: { [k: string]: { range: any[]; mets: number } };
   met_equivalent?: string;
   kgCo2PerKm: number;
   text?: string;

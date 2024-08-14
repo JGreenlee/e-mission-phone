@@ -12,16 +12,19 @@ import { markIntroDone, registerUserDone } from './onboardingHelper';
 import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 import { onboardingStyles } from './OnboardingStack';
-import { displayErrorMsg } from '../plugin/logger';
+import { displayErrorMsg, logDebug } from '../plugin/logger';
 import i18next from 'i18next';
+import { resetDataAndRefresh } from '../config/dynamicConfig';
 
 let preloadedResponsePromise: Promise<any>;
 export function preloadDemoSurveyResponse() {
   if (!preloadedResponsePromise) {
     if (!registerUserDone) {
       displayErrorMsg(i18next.t('errors.not-registered-cant-contact'));
+      resetDataAndRefresh();
       return Promise.resolve(null);
     }
+    logDebug('preloading previous survey response');
     preloadedResponsePromise = loadPreviousResponseForSurvey(DEMOGRAPHIC_SURVEY_DATAKEY);
   }
   return preloadedResponsePromise;
@@ -36,7 +39,7 @@ const SurveyPage = () => {
     if (prevSurveyResponse) {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(prevSurveyResponse, 'text/xml');
-      const surveyEndDt = xmlDoc.querySelector('end')?.textContent; // ISO datetime of survey completion
+      const surveyEndDt = xmlDoc.getElementsByTagName('end')[0]?.textContent; // ISO datetime of survey completion
       if (!surveyEndDt) return;
       return DateTime.fromISO(surveyEndDt).toLocaleString(DateTime.DATE_FULL);
     }
@@ -48,6 +51,7 @@ const SurveyPage = () => {
       already started.
       Otherwise, it will start a new promise. Either way, we wait for it to finish before proceeding. */
     preloadDemoSurveyResponse().then((lastSurvey) => {
+      logDebug(`previous survey response loaded, lastSurvey: ${JSON.stringify(lastSurvey)}`);
       if (lastSurvey?.data?.xmlResponse) {
         setPrevSurveyResponse(lastSurvey.data.xmlResponse);
       } else {

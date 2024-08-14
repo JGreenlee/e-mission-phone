@@ -41,7 +41,7 @@ export const { subscribe, publish } = LocalStorageObserver;
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T | string>(() => {
     try {
-      const item = window.localStorage.getItem(key);
+      const item = window['localStorage']?.getItem(key);
       return item || initialValue;
     } catch (error) {
       return initialValue;
@@ -52,7 +52,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   if (keyRef.current !== key) {
     keyRef.current = key;
     // force state update
-    const storedValue = window.localStorage.getItem(key);
+    const storedValue = window['localStorage']?.getItem(key);
     if (storedValue) setStoredValue(storedValue);
   }
 
@@ -64,7 +64,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
       setStoredValue(valueToStore);
       LocalStorageObserver.publish(key, valueToStore);
       if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        window['localStorage']?.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
       displayError(error);
@@ -109,7 +109,7 @@ let nominatimError: Error;
 // if the address name is already cached, it skips the fetch
 async function fetchNominatimLocName(loc_geojson) {
   const coordsStr = loc_geojson.coordinates.toString();
-  const cachedResponse = localStorage.getItem(coordsStr);
+  const cachedResponse = window['localStorage']?.getItem(coordsStr);
   if (cachedResponse) {
     logDebug(`fetchNominatimLocName: found cached response for ${coordsStr} = 
       ${cachedResponse}, skipping fetch`);
@@ -127,7 +127,7 @@ async function fetchNominatimLocName(loc_geojson) {
     logDebug(`while reading data from nominatim, 
       status = ${response.status}; 
       data = ${JSON.stringify(data)}`);
-    localStorage.setItem(coordsStr, JSON.stringify(data));
+    window['localStorage']?.setItem(coordsStr, JSON.stringify(data));
     publish(coordsStr, data);
   } catch (error) {
     if (!nominatimError) {

@@ -3,13 +3,25 @@ import { displayError, logDebug } from '../plugin/logger';
 import { ServerConnConfig } from '../types/appConfigTypes';
 import { TimestampRange } from '../types/diaryTypes';
 
+import demoSurvey from '../../json/demo-survey-v2.json';
+import demoSurveyShort from '../../json/demo-survey-short-v1.json';
+
+const localFiles = {
+  'json/demo-survey-v2.json': demoSurvey,
+  'json/demo-survey-short-v1.json': demoSurveyShort,
+};
+
 /**
  * @param url URL endpoint for the request
  * @param fetchOpts (optional) options for the fetch request. If 'cache' is set to 'reload', the cache will be ignored
  * @returns Promise of the fetched response (as text) or cached text from local storage
  */
 export async function fetchUrlCached(url: string, fetchOpts?: RequestInit) {
-  const stored = localStorage.getItem(url);
+  if (localFiles[url]) {
+    logDebug(`fetchUrlCached: ${url} is a local file, returning`);
+    return JSON.stringify(localFiles[url]);
+  }
+  const stored = window['localStorage']?.getItem(url);
   if (stored && fetchOpts?.cache != 'reload') {
     logDebug(`fetchUrlCached: found cached data for url ${url}, returning`);
     return Promise.resolve(stored);
@@ -18,7 +30,7 @@ export async function fetchUrlCached(url: string, fetchOpts?: RequestInit) {
     logDebug(`fetchUrlCached: cache had ${stored} for url ${url}, not using; fetching`);
     const response = await fetch(url, fetchOpts);
     const text = await response.text();
-    localStorage.setItem(url, text);
+    window['localStorage']?.setItem(url, text);
     logDebug(`fetchUrlCached: fetched data for url ${url}, returning`);
     return text;
   } catch (e) {

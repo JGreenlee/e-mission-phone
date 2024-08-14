@@ -15,7 +15,7 @@ import useAppConfig from '../../useAppConfig';
 import AddNoteButton from '../../survey/enketo/AddNoteButton';
 import AddedNotesList from '../../survey/enketo/AddedNotesList';
 import { getTheme } from '../../appTheme';
-import { DiaryCard, cardStyles } from './DiaryCard';
+import { DiaryCard, cardStyles, cardWidth } from './DiaryCard';
 import { useNavigation } from '@react-navigation/native';
 import { useAddressNames } from '../addressNamesHelper';
 import TimelineContext from '../../TimelineContext';
@@ -120,8 +120,8 @@ const TripCard = ({ trip, isFirstInList }: Props) => {
               downscaleTiles={true}
               cacheHtml={true}
               /* the map should be at least as tall as it is wide
-                          so it doesn't look squished */
-              style={[{ minHeight: windowWidth / 2 }, mapStyle]}
+                so it doesn't look squished */
+              style={[{ minHeight: cardWidth(windowWidth) / 2 }, mapStyle]}
             />
           )}
           <ModesIndicator trip={trip} detectedModes={detectedModes} />

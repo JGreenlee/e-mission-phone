@@ -2,7 +2,7 @@ import React, { useContext, useMemo } from 'react';
 import TripCard from '../cards/TripCard';
 import PlaceCard from '../cards/PlaceCard';
 import UntrackedTimeCard from '../cards/UntrackedTimeCard';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Platform } from 'react-native';
 import { ActivityIndicator, Banner, Icon, Text } from 'react-native-paper';
 import LoadMoreButton from './LoadMoreButton';
 import { useTranslation } from 'react-i18next';
@@ -106,11 +106,13 @@ const TimelineScrollList = ({ listEntries }: Props) => {
             is the least intrusive way I've found to trigger a layout change.
           It basically just jiggles the element so it doesn't blank out. */
         onContentSizeChange={() => {
-          const list = document.getElementById('timelineScrollList');
-          list?.style.setProperty('margin-right', '1px');
-          setTimeout(() => {
-            list?.style.setProperty('margin-right', '0');
-          });
+          if (Platform.OS == 'web') {
+            const list = document.getElementById('timelineScrollList');
+            list?.style.setProperty('margin-right', '1px');
+            setTimeout(() => {
+              list?.style.setProperty('margin-right', '0');
+            });
+          }
         }}
       />
     );

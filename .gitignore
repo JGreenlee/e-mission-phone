@@ -18,3 +18,7 @@ www/dist/
 config.xml
 package.json
 coverage/
+
+/.expo/
+/ios/
+/android/

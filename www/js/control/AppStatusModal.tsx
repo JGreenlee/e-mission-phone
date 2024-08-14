@@ -4,6 +4,7 @@ import { Dialog, useTheme } from 'react-native-paper';
 import PermissionsControls from '../appstatus/PermissionsControls';
 import { settingStyles } from './ProfileSettings';
 import { AppContext } from '../App';
+import { logDebug } from '../plugin/logger';
 //TODO -- import settings styles for dialog
 
 const AppStatusModal = ({ permitVis, setPermitVis }) => {
@@ -14,6 +15,8 @@ const AppStatusModal = ({ permitVis, setPermitVis }) => {
 
   /* Listen for permissions status changes to determine if we should show the modal. */
   useEffect(() => {
+    logDebug(`AppStatusModal: overallStatus = ${overallStatus}
+      checkList = ${JSON.stringify(checkList)}`);
     if (overallStatus === false) {
       setPermitVis(true);
     }

@@ -3,7 +3,8 @@ import { getBaseModeByKey, getBaseModeByValue } from './diaryHelper';
 import { getUnifiedDataForInterval } from '../services/unifiedDataLoader';
 import { getRawEntries } from '../services/commHelper';
 import { ServerResponse, BEMData } from '../types/serverData';
-import L, { LatLng } from 'leaflet';
+import { LatLng } from 'leaflet';
+import { toLatLng } from 'leaflet/src/geo/LatLng';
 import { DateTime } from 'luxon';
 import {
   UserInputEntry,
@@ -347,7 +348,7 @@ function points2UnprocessedTrip(
   const dists: number[] = [];
   let loc, locLatLng: LatLng;
   locationPoints.forEach((pt) => {
-    const ptLatLng = L.latLng([pt.data.latitude, pt.data.longitude]);
+    const ptLatLng = toLatLng([pt.data.latitude, pt.data.longitude]);
     if (loc) {
       const dist = locLatLng.distanceTo(ptLatLng);
       const timeDelta = pt.data.ts - loc.data.ts;

@@ -9,6 +9,7 @@
  * consistent event names help us know what happens when
  *
  * code based on: https://blog.logrocket.com/using-custom-events-react/
+ * modified to not use 'document' events and instead use a simple object to store listeners
  */
 
 import { logDebug } from './plugin/logger';
@@ -22,14 +23,18 @@ export const EVENTS = {
   INTRO_DONE_EVENT: 'intro_done',
 };
 
+// object to store an array of 1 or more listeners for each event
+const listeners: { [eventName: string]: Function[] } = {};
+
 /**
  * @function starts listening to an event
  * @param eventName {string} the name of the event
  * @param listener event listener, function to execute on event
  */
-export function subscribe(eventName: string, listener) {
+export function subscribe(eventName: string, listener: Function) {
   logDebug('adding ' + eventName + ' listener');
-  document.addEventListener(eventName, listener);
+  listeners[eventName] ||= [];
+  listeners[eventName].push(listener);
 }
 
 /**
@@ -37,9 +42,9 @@ export function subscribe(eventName: string, listener) {
  * @param eventName {string} the name of the event
  * @param listener event listener, function to execute on event
  */
-export function unsubscribe(eventName: string, listener) {
+export function unsubscribe(eventName: string, listener: Function) {
   logDebug('removing ' + eventName + ' listener');
-  document.removeEventListener(eventName, listener);
+  listeners[eventName]?.splice(listeners[eventName].indexOf(listener), 1);
 }
 
 /**
@@ -48,8 +53,9 @@ export function unsubscribe(eventName: string, listener) {
  * @param eventName {string} the name of the event
  * @param data any additional data to be added to event
  */
-export function publish(eventName: string, data) {
+export function publish(eventName: string, data: any) {
   logDebug('publishing ' + eventName + ' with data ' + JSON.stringify(data));
-  const event = new CustomEvent(eventName, { detail: data });
-  document.dispatchEvent(event);
+  for (let listener of listeners[eventName] || []) {
+    listener({ name: eventName, detail: data });
+  }
 }

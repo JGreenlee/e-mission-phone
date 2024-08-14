@@ -42,11 +42,7 @@ export const NavBarButton = ({ children, icon, iconSize, ...rest }: NavBarButton
         labelStyle={[s.btnLabel, rest.labelStyle]}
         {...rest}>
         <View style={s.textWrapper}>{children}</View>
-        {icon && (
-          <View style={{ justifyContent: 'center' }}>
-            <Icon source={icon} color={colors.onBackground} size={iconSize || 20} />
-          </View>
-        )}
+        {icon && <Icon source={icon} color={colors.onBackground} size={iconSize || 20} />}
       </Button>
     </>
   );
@@ -71,15 +67,10 @@ const s = StyleSheet.create({
   btnLabel: {
     fontSize: 12.5,
     fontWeight: '400',
-    height: '100%',
     marginHorizontal: 'auto',
     marginVertical: 'auto',
     display: 'flex',
-  },
-  icon: {
-    margin: 'auto',
-    width: 'auto',
-    height: 'auto',
+    alignItems: 'center',
   },
   textWrapper: {
     lineHeight: '100%',

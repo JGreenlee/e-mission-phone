@@ -48,7 +48,7 @@ const langs = {
 const locales = navigator?.languages?.length ? navigator.languages : [navigator.language];
 let detectedLang;
 for (const locale of locales) {
-  const lang = locale.trim().split(/-|_/)[0];
+  const lang = locale?.trim().split(/-|_/)[0];
   if (Object.keys(langs).includes(lang)) {
     detectedLang = lang;
     break; // once we find a supported language, stop looking

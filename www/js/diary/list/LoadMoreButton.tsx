@@ -22,10 +22,11 @@ const LoadMoreButton = ({ children, onPressFn, ...otherProps }) => {
 
 const s = StyleSheet.create({
   container: {
-    margin: 'auto',
+    alignSelf: 'center',
     marginVertical: 8,
   },
   btn: {
+    flexShrink: 1,
     maxHeight: 30,
     justifyContent: 'center',
   },

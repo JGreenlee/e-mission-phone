@@ -1,8 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Modal } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Modal, FlatList } from 'react-native';
 import { useTheme, Text, Appbar, IconButton } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { FlashList } from '@shopify/flash-list';
 import { DateTime } from 'luxon';
 import { AlertManager } from '../components/AlertBar';
 import { sendLocalDBFile } from '../services/shareLocalDBFile';
@@ -127,10 +126,9 @@ const LogPage = ({ pageVis, setPageVis }) => {
           <IconButton icon="email" onPress={() => emailLog()} />
         </View>
 
-        <FlashList
+        <FlatList
           data={entries}
           renderItem={logItem}
-          estimatedItemSize={75}
           keyExtractor={(item) => item.ID}
           ItemSeparatorComponent={separator}
           onEndReachedThreshold={0.5}

@@ -28,12 +28,12 @@ function localStorageSet(key: string, value: { [k: string]: any }) {
   //case where local was null and native was undefined stored "undefined"
   //see discussion: https://github.com/e-mission/e-mission-phone/pull/1072#discussion_r1373753945
   if (value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    window['localStorage']?.setItem(key, JSON.stringify(value));
   }
 }
 
 function localStorageGet(key: string) {
-  const value = localStorage.getItem(key);
+  const value = window['localStorage']?.getItem(key);
   if (value) {
     return JSON.parse(value);
   } else {
@@ -113,12 +113,12 @@ export function storageGet(key: string) {
 }
 
 export function storageRemove(key: string) {
-  localStorage.removeItem(key);
+  window['localStorage']?.removeItem(key);
   return window['cordova'].plugins.BEMUserCache.removeLocalStorage(key);
 }
 
 export function storageClear({ local, native }: { local?: boolean; native?: boolean }) {
-  if (local) localStorage.clear();
+  if (local) window['localStorage']?.clear();
   if (native) return window['cordova'].plugins.BEMUserCache.clearAll();
   return Promise.resolve();
 }

@@ -17,7 +17,7 @@ it('stores a value, removes it, and checks that it is gone', async () => {
   await storageSet('test2', 'test value 2');
   await storageRemove('test2');
   const retVal = await storageGet('test2');
-  expect(retVal).toBeUndefined();
+  expect(retVal).toBeNull();
 });
 
 it('can store objects too', async () => {

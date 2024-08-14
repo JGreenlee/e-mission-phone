@@ -7,6 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { SurveyOptions, fetchSurvey, getInstanceStr, saveResponse } from './enketoHelper';
 import { displayError, displayErrorMsg, logDebug } from '../../plugin/logger';
 
+// styles for Enketo, plus some of our own overrides
+import './enketoStyles.css';
+
 type Props = Omit<ModalProps, 'children'> & {
   surveyName: string;
   onResponseSaved: (response: any) => void;
@@ -61,6 +64,7 @@ const EnketoModal = ({ surveyName, onResponseSaved, opts, ...rest }: Props) => {
   }
 
   useEffect(() => {
+    logDebug(`EnketoModal useEffect: visible: ${rest.visible}; appConfig: ${!!appConfig}`);
     if (!rest.visible || !appConfig) return;
     initSurvey();
   }, [appConfig, rest.visible]);

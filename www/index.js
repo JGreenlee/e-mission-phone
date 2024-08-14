@@ -1,16 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider as PaperProvider } from 'react-native-paper';
-
-import './css/style.scss';
-import 'chartjs-adapter-luxon';
-
-import initializedI18next from './js/i18nextInit';
-window.i18next = initializedI18next;
 
 import App from './js/App';
-import { getTheme } from './js/appTheme';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { logDebug } from './js/plugin/logger';
 
 export const deviceReady = new Promise((resolve) => {
@@ -29,22 +20,5 @@ deviceReady.then(() => {
   cordova.plugin.http.setDataSerializer('json');
   const rootEl = document.getElementById('appRoot');
   const reactRoot = createRoot(rootEl);
-
-  const theme = getTheme();
-
-  reactRoot.render(
-    <PaperProvider theme={theme}>
-      <style type="text/css">
-        {`
-          @font-face {
-            font-family: 'MaterialCommunityIcons';
-            src: url(${require('react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf')}) format('truetype');
-          }
-        `}
-      </style>
-      <SafeAreaView style={{ flex: 1 }}>
-        <App />
-      </SafeAreaView>
-    </PaperProvider>,
-  );
+  reactRoot.render(<App />);
 });

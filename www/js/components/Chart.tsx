@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import { ChartData, Chart as ChartJS, ScriptableContext, registerables } from 'chart.js';
+import 'chartjs-adapter-luxon';
 import { Chart as ChartJSChart } from 'react-chartjs-2';
 import Annotation, { AnnotationOptions, LabelPosition } from 'chartjs-plugin-annotation';
 import { dedupColors, getChartHeight, darkenOrLighten } from './charting';
@@ -238,7 +239,7 @@ const Chart = ({
                       borderColor: a.color || colors.onBackground,
                       borderWidth: 3,
                       borderDash: [3, 3],
-                    }) satisfies AnnotationOptions,
+                    } satisfies AnnotationOptions),
                 ),
               },
             }),

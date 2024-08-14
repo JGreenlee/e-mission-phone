@@ -81,6 +81,7 @@ module.exports = {
           enketo-transformer/web (https://github.com/enketo/enketo-transformer#web).
         So, we can tell webpack it's ok to ignore libxslt by aliasing it to false. */
       'libxslt': false,
+      'expo': false,
     },
     extensions: ['.web.js', '.jsx', '.tsx', '.ts', '.js'],
   },

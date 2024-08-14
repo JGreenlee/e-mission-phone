@@ -342,8 +342,10 @@ export function resolveSurveyButtonConfig(
 }
 
 export async function fetchSurvey(url: string) {
+  logDebug('fetchSurvey: url = ' + url);
   const responseText = await fetchUrlCached(url);
   if (!responseText) return;
+  logDebug('fetchSurvey: responseText = ' + responseText);
   try {
     return JSON.parse(responseText);
   } catch (e) {

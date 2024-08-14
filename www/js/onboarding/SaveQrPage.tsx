@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { ActivityIndicator, Button, Surface, Text } from 'react-native-paper';
 import { registerUserDone, setRegisterUserDone, setSaveQrDone } from './onboardingHelper';
 import { AppContext } from '../App';
@@ -92,7 +92,11 @@ const s = StyleSheet.create({
     fontFamily: 'monospace',
     marginVertical: 8,
     maxWidth: '100%',
-    wordBreak: 'break-all',
+    ...Platform.select({
+      web: {
+        wordBreak: 'break-all',
+      },
+    }),
   },
 });
 

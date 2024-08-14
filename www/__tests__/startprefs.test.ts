@@ -1,6 +1,5 @@
 import {
   markConsented,
-  isConsented,
   readConsentState,
   getConsentDocument,
 } from '../js/splash/startprefs';
@@ -31,9 +30,9 @@ global.fetch = (url: string) =>
   }) as any;
 
 it('checks state of consent before and after marking consent', async () => {
-  expect(await readConsentState().then(isConsented)).toBeFalsy();
+  expect(await readConsentState()).toBeFalsy();
   let marked = await markConsented();
-  expect(await readConsentState().then(isConsented)).toBeTruthy();
+  expect(await readConsentState()).toBeTruthy();
   expect(await getConsentDocument()).toEqual({
     approval_date: '2016-07-14',
     protocol_id: '2014-04-6267',

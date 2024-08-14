@@ -13,6 +13,9 @@ import { Card, PaperProvider, useTheme } from 'react-native-paper';
 import TimestampBadge from './TimestampBadge';
 import useDerivedProperties from '../useDerivedProperties';
 
+// card width is 90% of the window width, but no more than 600 pixels
+export const cardWidth = (windowWidth) => Math.min(600, windowWidth * 0.9);
+
 export const DiaryCard = ({ timelineEntry, children, flavoredTheme, ...otherProps }) => {
   const { width: windowWidth } = useWindowDimensions();
   const { displayStartTime, displayEndTime, displayStartDateAbbr, displayEndDateAbbr } =
@@ -22,15 +25,13 @@ export const DiaryCard = ({ timelineEntry, children, flavoredTheme, ...otherProp
   return (
     <PaperProvider theme={theme}>
       <Card
-        style={[cardStyles.card, { width: windowWidth * 0.9 }]}
+        style={[cardStyles.card, { width: cardWidth(windowWidth) }]}
         contentStyle={{ alignItems: 'center' }}
         {...otherProps}>
         <View
           aria-hidden={true}
           style={{
             position: 'absolute',
-            left: 0,
-            right: 0,
             top: -10,
             justifyContent: 'center',
             zIndex: 999,
@@ -44,8 +45,6 @@ export const DiaryCard = ({ timelineEntry, children, flavoredTheme, ...otherProp
           aria-hidden={true}
           style={{
             position: 'absolute',
-            left: 0,
-            right: 0,
             bottom: -10,
             justifyContent: 'center',
             zIndex: 999,

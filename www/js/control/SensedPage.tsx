@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, SafeAreaView, Modal } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Modal, FlatList } from 'react-native';
 import { useTheme, Appbar, IconButton, Text } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { FlashList } from '@shopify/flash-list';
 import { DateTime } from 'luxon';
 import { sendLocalDBFile } from '../services/shareLocalDBFile';
 import NavBar from '../components/NavBar';
@@ -63,10 +62,9 @@ const SensedPage = ({ pageVis, setPageVis }) => {
           <IconButton icon="email" onPress={() => sendLocalDBFile('userCacheDB')} />
         </View>
 
-        <FlashList
+        <FlatList
           data={entries}
           renderItem={cacheItem}
-          estimatedItemSize={75}
           keyExtractor={(item) => item.metadata.write_ts}
           ItemSeparatorComponent={separator}
         />

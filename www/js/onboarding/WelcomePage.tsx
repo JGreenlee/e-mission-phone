@@ -91,6 +91,7 @@ const WelcomePage = () => {
   return (
     <>
       <Surface style={[onboardingStyles.page, { paddingVertical: 0 }]}>
+        <View style={s.headerArea(windowWidth, colors, 18, 0.3)} aria-hidden={true} />
         <View style={s.headerArea(windowWidth, colors)} aria-hidden={true} />
         <IconButton
           accessibilityLabel={t('join.more-info')}
@@ -182,16 +183,15 @@ const WelcomePage = () => {
 };
 
 const s: any = StyleSheet.create({
-  headerArea: ((windowWidth, colors) => ({
-    width: windowWidth * 2.5,
-    height: windowWidth,
-    left: -windowWidth * 0.75,
-    borderBottomRightRadius: '50%',
-    borderBottomLeftRadius: '50%',
+  headerArea: ((windowWidth, colors, offset, opacity) => ({
+    width: windowWidth,
+    height: 600,
+    transform: [{ scaleX: 2.5 }],
+    borderRadius: windowWidth / 2,
     position: 'absolute',
-    top: (windowWidth * -2) / 3,
+    top: -460 + (offset || 0),
+    opacity: opacity || 1,
     backgroundColor: colors.primary,
-    boxShadow: `0 16px ${color(colors.primary).alpha(0.3).rgb().string()}`,
   })) as ViewStyle,
   appIconWrapper: ((colors): ViewStyle => ({
     marginTop: 20,

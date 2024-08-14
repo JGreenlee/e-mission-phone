@@ -39,7 +39,7 @@ const UntrackedTimeCard = ({ triplike }: Props) => {
             </Text>
           </Text>
         </View>
-        <View style={[cardStyles.panelSection, { margin: 'auto' }]}>
+        <View style={[cardStyles.panelSection, { alignSelf: 'center' }]}>
           <Text
             style={[
               s.untrackedText,
