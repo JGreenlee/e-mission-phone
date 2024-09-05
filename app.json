@@ -11,6 +11,22 @@
       "image": "./resources/splash.png",
       "backgroundColor": "#EEEEEE"
     },
-    "icon": "./resources/icon.png"
+    "icon": "./resources/icon.png",
+    // "plugins": [
+    //   [
+    //     "expo-build-properties",
+    //     {
+    //       "android": {
+    //         "compileSdkVersion": 34,
+    //         "targetSdkVersion": 34
+    //       }
+    //     }
+    //   ],
+    //   [
+    //     "expo-gradle-ext-vars", {
+    //       "VERSION_CODE": "1"
+    //     }
+    //   ]
+    // ]
   }
 }
