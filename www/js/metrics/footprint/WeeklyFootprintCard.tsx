@@ -4,7 +4,7 @@ import { Card, Checkbox, Text } from 'react-native-paper';
 import { metricsStyles } from '../MetricsScreen';
 import TimelineContext from '../../TimelineContext';
 import {
-  aggMetricEntries,
+  aggUnitsOfMetricData,
   getColorForModeLabel,
   segmentDaysByWeeks,
   sumMetricEntries,
@@ -49,7 +49,8 @@ const WeeklyFootprintCard = ({
     if (!userMetrics?.footprint?.length) return [];
     const weeks = segmentDaysByWeeks(userMetrics?.footprint, dateRange[1]);
     return weeks.map(
-      (week) => [sumMetricEntries(week, 'footprint'), aggMetricEntries(week, 'footprint')] as const,
+      (week) =>
+        [sumMetricEntries(week, 'footprint'), aggUnitsOfMetricData(week, 'footprint')] as const,
     );
   }, [userMetrics]);
 

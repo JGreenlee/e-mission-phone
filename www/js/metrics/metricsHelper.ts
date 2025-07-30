@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import color from 'color';
-import { DayOfMetricData, MetricEntry, MetricValue } from './metricsTypes';
+import { DayOfMetricData, DimensionValue, MetricMeasure, UnitOfMetricData } from './metricsTypes';
 import { logDebug } from '../plugin/logger';
 import { MetricName, GroupingField } from 'nrel-openpath-deploy-configs';
 import { ImperialConfig } from '../config/useImperialConfig';
@@ -109,8 +109,8 @@ export const tsForDayOfMetricData = (day: DayOfMetricData) => {
   return _datesTsCache[day.date];
 };
 
-export const valueForFieldOnDay = (day: MetricEntry, field: string, key: string) =>
-  day[`${field}_${key}`];
+export const valueForFieldOnDay = (day: DayOfMetricData, dimension: GroupingField, value: string) =>
+  day.dimensions[dimension]?.find((d) => d.value == value)?.measure;
 
 // [unit suffix, unit conversion function, unit display function]
 // e.g. ['hours', (seconds) => seconds/3600, (seconds) => seconds/3600 + ' hours']
@@ -150,44 +150,63 @@ export function getUnitUtilsForMetric(
 }
 
 /**
- * @param entries an array of metric entries
+ * @param units an array of units of metric data
  * @param metricName the metric that the values are for
  * @returns a metric entry with fields of the same name summed across all entries
  */
-export function aggMetricEntries<T extends MetricName>(entries: MetricEntry<T>[], metricName: T) {
-  let acc = {};
-  entries?.forEach((e) => {
-    for (let field in e) {
-      if (GROUPING_FIELDS.some((f) => field.startsWith(f))) {
-        acc[field] = metrics_summaries.acc_value_of_metric(metricName, acc?.[field], e[field]);
-      } else if (field == 'nUsers') {
-        acc[field] = (acc[field] || 0) + e[field];
-      }
-    }
+export function aggUnitsOfMetricData<T extends MetricName>(
+  units: DayOfMetricData<T>[],
+  metricName: T,
+) {
+  let acc: UnitOfMetricData<T> = {
+    metric: metricName,
+    nUsers: 0,
+    dimensions: {},
+  };
+  units?.forEach((unit) => {
+    acc['nUsers'] += unit.nUsers;
+    Object.entries(unit.dimensions).forEach(([field, dimValues]) => {
+      dimValues.forEach((dimVal) => {
+        acc.dimensions[field] = acc.dimensions[field] || [];
+        const existing: DimensionValue<T> = acc.dimensions[field].find(
+          (e) => e.value === dimVal.value,
+        );
+        const measure = (acc.dimensions[field] = metrics_summaries.acc_value_of_metric(
+          metricName,
+          existing.measure,
+          dimVal.measure,
+        ));
+        if (existing) {
+          existing.measure = measure;
+        } else {
+          acc.dimensions[field].push({
+            value: dimVal.value,
+            measure,
+          } as DimensionValue<T>);
+        }
+      });
+    });
   });
-  return acc as MetricEntry<T extends `${infer U}` ? U : never>;
+  return acc;
 }
 
 /**
- * @param a metric entry
+ * @param a unit of metric data
  * @param metricName the metric that the values are for
  * @returns the result of summing the values across all fields in the entry
  */
-export function sumMetricEntry<T extends MetricName>(entry: MetricEntry<T>, metricName: T) {
-  let acc;
-  for (let field in entry) {
-    if (GROUPING_FIELDS.some((f) => field.startsWith(f))) {
-      acc = metrics_summaries.acc_value_of_metric(metricName, acc, entry[field]);
-    }
-  }
-  if (acc && typeof acc == 'object') {
-    acc['nUsers'] = entry['nUsers'] || 1;
-  }
-  return (acc || {}) as MetricValue<T extends `${infer U}` ? U : never>;
+export function sumMetricEntry<T extends MetricName>(unit: UnitOfMetricData<T>, metricName: T) {
+  const acc: Partial<Record<GroupingField, MetricMeasure<T>>> = {};
+  Object.entries(unit.dimensions).forEach(([field, dimValues]) => {
+    dimValues.forEach((dimVal) => {
+      acc[field] = metrics_summaries.acc_value_of_metric(metricName, acc[field], dimVal.measure);
+    });
+  });
+  return acc;
 }
 
 export const sumMetricEntries = <T extends MetricName>(days: DayOfMetricData[], metricName: T) =>
-  sumMetricEntry<T>(aggMetricEntries(days, metricName) as any, metricName);
+  sumMetricEntry<T>(aggUnitsOfMetricData(days, metricName) as any, metricName);
 
 // Unlabelled data shows up as 'UNKNOWN' grey and mostly transparent
 // All other modes are colored according to their base mode

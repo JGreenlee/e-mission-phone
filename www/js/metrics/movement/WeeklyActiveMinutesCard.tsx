@@ -4,7 +4,7 @@ import { Card, Text, useTheme } from 'react-native-paper';
 import { MetricsData } from '../metricsTypes';
 import { metricsStyles } from '../MetricsScreen';
 import {
-  aggMetricEntries,
+  aggUnitsOfMetricData,
   getColorForModeLabel,
   segmentDaysByWeeks,
   valueForFieldOnDay,
@@ -25,7 +25,7 @@ const WeeklyActiveMinutesCard = ({ userMetrics, activeModes }: Props) => {
     if (!userMetrics?.duration?.length) return [];
     const weeks = segmentDaysByWeeks(userMetrics?.duration, dateRange[1]);
     return weeks.map((week, i) => ({
-      ...aggMetricEntries(week, 'duration'),
+      ...aggUnitsOfMetricData(week, 'duration'),
     }));
   }, [userMetrics]);
 

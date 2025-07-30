@@ -13,7 +13,7 @@ import {
   tsForDayOfMetricData,
   valueForFieldOnDay,
   getUnitUtilsForMetric,
-  aggMetricEntries,
+  aggUnitsOfMetricData,
   sumMetricEntry,
   sumMetricEntries,
   getColorForModeLabel,
@@ -233,7 +233,7 @@ describe('metricsHelper', () => {
 
   describe('aggMetricEntries', () => {
     it('aggregates footprint metric entries', () => {
-      const result = aggMetricEntries(fakeFootprintEntries, 'footprint');
+      const result = aggUnitsOfMetricData(fakeFootprintEntries, 'footprint');
       expect(result).toEqual({
         nUsers: 30,
         mode_confirm_a: expect.objectContaining({
