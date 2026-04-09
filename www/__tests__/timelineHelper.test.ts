@@ -15,7 +15,7 @@ import { GeoJSONData, GeoJSONStyledFeature } from '../js/types/diaryTypes';
 describe('useGeojsonForTrip', () => {
   it('work with an empty input', () => {
     const testVal = useGeojsonForTrip({} as any);
-    expect(testVal).toBeFalsy;
+    expect(testVal).toBeFalsy();
   });
 
   const checkGeojson = (geoObj: GeoJSONData) => {
@@ -30,7 +30,7 @@ describe('useGeojsonForTrip', () => {
 
   it('works without labelMode flag', () => {
     const testValue = useGeojsonForTrip(mockTLH.mockCompDataTwo.phone_data[1].data) as GeoJSONData;
-    expect(testValue).toBeTruthy;
+    expect(testValue).toBeTruthy();
     checkGeojson(testValue);
     expect(testValue.data.features.length).toBe(3);
   });
